@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Test MSS HTML</title>
+  <script src="LwdElement.js"></script>
+  <script src="LwdSlot.js"></script>
+
+  <script src="LwdButton.js"></script>
+  <script src="LwdGalery.js"></script>
+  <script src="LwdImage.js"></script>
+  <script src="LwdInput.js"></script>
+  <script src="LwdPagination.js"></script>
+  <script src="LwdSection.js"></script>
+  <script src="rawTest.js"></script>
+  <script src="LwdPage.js"></script>
+  <script src="LwdPageGalery.js"></script>
+
+  <style>
+    html {
+      --bg-1: black;
+      --bg-2: #4400DD;
+      --bg-1: black;
+      --bg-1: black;
+      --bg-input: #3d3d3d;
+
+      /* #7100ff */
+
+
+    }
+
+    html {
+      box-sizing: border-box;
+      font-family: 'Courier New';
+      font-size: 1rem;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* lwd-image{
+      height: 140px;
+      width: 133px;
+    } */
+
+    #top {
+      display: grid;
+      grid-template-columns: 7.5rem auto 2rem;
+      grid-template-rows: 2rem;
+      /* height:; */
+      width: 100vw;
+      top: 0;
+    }
+
+    #side {
+      height: calc(100vh - 20px);
+      width: 200px;
+      top: 20px;
+      opacity: 30%;
+    }
+
+    lwd-page-galery {
+      padding: 40px;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #top lwd-input {
+      font-size: 1.5rem;
+    }
+
+    #top lwd-button {}
+  </style>
+</head>
+
+<body style="width: 100vw; height: 100vh; margin: 0; background-color: black;">
+
+</body>
+
+<script>
+  document.body.append(pag = new LwdPagination({page: 1, lastPage: 20}))
+  // document.body.append(pag2 = new LwdPagination2({page: 1, lastPage: 20}))
+  // document.body.append(li = new LwdImage({src: 'https://art.ngfiles.com/images/6227000/6227150_1440717_bigdad123_untitled-6227150.4acf7dfd9f13e493eaf0830e25746a08.jpg?f1732242522'}))
+  // document.body.append(topS = new LwdSection({ id: 'top' }))
+  // document.body.append(sideS = new LwdSection({id: 'side'}))
+
+  // galeryProps = { imageHeight: '270px', imageWidth: '300px' }
+  // document.body.append(pg = new LwdPageGalery({ fetchFunction: ExternalApi.fetchRule34xxx, pageSize: 9, galery: galeryProps }))
+
+  // topS.append(document.createElement('div'))
+
+  // autocompleteFetch = async (search) => {
+  //   let autocompleteOption = await ExternalApi.autocompleteRule34xxx(search)
+  //   autocompleteOption = autocompleteOption.map(({ name, count, category }) =>
+  //     ({ innerText: `${name} (${count})`, value: name.replaceAll(' ', "_"), color: `var(--${category})` }))
+  //   return autocompleteOption
+  // }
+  // topS.append(mainInput = new LwdInput({ name: 'search', autocompleteFetch }))
+  // topS.append(searchBtn = new LwdButton({ innerText: 'S', onclick: () => pg.search = mainInput.value }))
+</script>
+
+</html>
