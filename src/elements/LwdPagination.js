@@ -1,6 +1,7 @@
 class LwdPagination extends LwdElement {
   constructor(props = {}) {
     super(undefined, props);
+    this.shadowRoot.append(new LwdSlot())
 
     this.buttonConstructor = props.buttonConstructor || this.defaultButtonConstructor
     this.page ||= 1
@@ -25,16 +26,11 @@ class LwdPagination extends LwdElement {
   }
 
   get styleSheet() {
-    return `
+    return `${super.styleSheet}
     :host{
       display: grid;
-      grid-template-columns: repeat(13, auto);
-    }
-
-
-    :host > div{
-      display: flex;
-      justify-content: space-evenly;
+      grid-template-columns: repeat(13, 1fr);
+      grid-gap: 8px;
     }
 `
   }
@@ -42,23 +38,24 @@ class LwdPagination extends LwdElement {
   render() {
     super.render()
 
-    this.shadowRoot.querySelectorAll('lwd-button').forEach((lwdButton) => lwdButton.remove())
+    this.querySelectorAll('lwd-button').forEach((lwdButton) => lwdButton.remove())
 
     console.log('numberOfPage min', (this.pagePad * 2) + 1, this.lastPage)
     const numberOfPage = Math.min((this.pagePad * 2) + 1, this.lastPage)
-    const firstPage = Math.max(1, Math.min(this.page - this.pagePad, this.page - numberOfPage + 1))
+    const firstPage = Math.max(1, Math.min(this.page - this.pagePad,  this.lastPage - numberOfPage + 1))
+
     Array.from({ length: numberOfPage }, (_, i) => firstPage + i).forEach((thisPage) => {
-      this.shadowRoot.append(this.buttonConstructor({ innerText: `${thisPage}`, onclick: () => this.page = thisPage, active: (thisPage == this.page) }))
+      this.append(this.buttonConstructor({ innerText: `${thisPage}`, onclick: () => this.page = thisPage, active: (thisPage == this.page) }))
     })
 
     this.renderArrows()
   }
 
   renderArrows() {
-    this.shadowRoot.prepend(this.buttonConstructor({ innerText: '<', onclick: () => this.page = parseInt(this.page) - 1 }))
-    this.shadowRoot.prepend(this.buttonConstructor({ innerText: '<<', onclick: () => this.page = 1 }))
-    this.shadowRoot.append(this.buttonConstructor({ innerText: '>', onclick: () => this.page = parseInt(this.page) + 1 }))
-    this.shadowRoot.append(this.buttonConstructor({ innerText: '>>', onclick: () => this.page = this.lastPage }))
+    this.prepend(this.buttonConstructor({ innerText: '<', onclick: () => this.page = parseInt(this.page) - 1 }))
+    this.prepend(this.buttonConstructor({ innerText: '<<', onclick: () => this.page = 1 }))
+    this.append(this.buttonConstructor({ innerText: '>', onclick: () => this.page = parseInt(this.page) + 1 }))
+    this.append(this.buttonConstructor({ innerText: '>>', onclick: () => this.page = this.lastPage }))
   }
 }
 
