@@ -1,0 +1,1 @@
+class LwdSlot extends HTMLSlotElement{constructor(a={}){super(),Object.entries(a).forEach(([a,b])=>this[a]=b)}}customElements.define("lwd-slot",LwdSlot,{extends:"slot"});

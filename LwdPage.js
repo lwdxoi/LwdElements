@@ -1,0 +1,2 @@
+class LwdPage extends LwdElement{constructor(a={}){super(void 0,a),this.shadowRoot.append(new LwdSlot)}static get observedAttributes(){return["active"]}static get active(){return this.getAttribute("active")}static set active(a){this.setAttribute("active",a)}render(){super.render()}get styleSheet(){return`${super.styleSheet}
+    `}}customElements.define("lwd-page",LwdPage);
