@@ -1,14 +1,28 @@
-            - name: Auto Minify
-  # You may pin to the exact commit or the version.
-  # uses: nizarmah/auto-minify@5a5c9921c0b236b94e31dae5e585ffa0dded1100
-  uses: nizarmah/auto-minify@v3.0.0
-  with:
-    # Directory that contains the files you want to minify. Defaults to current directory (.)
-    directory: ./src
-    # Directory that contains the minified files. Defaults to same directory
-    output: .
-    # Overwrites the existing files with the minified version. Defaults to false.
-    overwrite: true
-    # Descend at most levels (a non-negative integer) levels of directories below the starting-points.
-    maxdepth: 9
-          
+name: Minify Workflow
+on:
+  push:
+    branches: [ main, master, minify-action ]
+
+jobs:
+  minify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out the repository
+        uses: actions/checkout
+
+      - name: auto minify the files
+        uses: nizarmah/auto-minify@v3
+        with:
+          # Directory that contains the files you want to minify. Defaults to current directory (.)
+          directory: ./src
+          # Directory that contains the minified files. Defaults to same directory
+          output: .
+          # Overwrites the existing files with the minified version. Defaults to false.
+          overwrite: true
+          # Descend at most levels (a non-negative integer) levels of directories below the starting-points.
+          maxdepth: 9
+
+      - name: auto commit the minified files
+        uses: stefanzweifel/git-auto-commit-action
+        with:
+          commit_message: "bot: Add auto minified files"
