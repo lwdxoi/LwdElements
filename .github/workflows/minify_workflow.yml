@@ -12,19 +12,19 @@ jobs:
 
       - name: Create unified file
         run: 
-          touch LwdElements.js
+          touch LwdElements.min.js && > LwdElements.min.js
 
       - name: Copy all files
         run:
-          while read p; do cat "$p" > LwdElements.js; done < minify_order;
+          while read p; do cat "$p" >> LwdElements.min.js; done < minify_order;
 
       - name: Minify the files
         uses: nizarmah/auto-minify@v3
         with:
           # Directory that contains the files you want to minify. Defaults to current directory (.)
-          directory: ./LwdElements.js
+          directory: ./LwdElements.min.js
           # Directory that contains the minified files. Defaults to same directory
-          output: ./LwdElements.min.js
+          output: .
           # Overwrites the existing files with the minified version. Defaults to false.
           overwrite: true
 
