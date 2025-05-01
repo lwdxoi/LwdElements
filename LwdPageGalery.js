@@ -1,0 +1,8 @@
+class LwdPageGalery extends LwdPage{constructor(a={}){const{pagination:b,galery:c,...d}=a;super(d),this.shadowRoot.querySelector("slot").name="galery",this.shadowRoot.append(new LwdSlot({name:"pagination"})),this.append(this.galery=new LwdGalery({...c,slot:"galery"})),this.append(this.pagination=new LwdPagination({...b,slot:"pagination"})),!this.fetchFunction||this.fetch(this.search||""),this.pagination.addEventListener("attribute-changed",({detail:{name:a}})=>"page"==a?this.render():""),this.addEventListener("attribute-changed",({detail:{name:a,newValue:b}})=>"search"==a?this.fetch(b):"")}static get observedAttributes(){return[...super.observedAttributes,"page-size","_fetch-function","search","_fetched-images"]}get reRenderOnChange(){return[...super.reRenderOnChange,"page-size","_fetch-function"]}async fetch(a){console.log("fetched",a),this.fetchedImages=this.serialize(await this.fetchFunction(a)),this.pagination.lastPage=Math.ceil(this.fetchedImages.length/this.pageSize),this.pagination.page=1,this.render()}serialize(a){return a.map(a=>({...a,id:`i-${a.id}`}))}paginate(){const a=(pg.pagination.page-1)*pg.pageSize;return pg.fetchedImages?.slice(a,a+parseInt(pg.pageSize))}render(){super.render(),this.galery.imageList=this.paginate()}get styleSheet(){return`${super.styleSheet}
+:host{
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  grid-template-rows: calc(100% - 50px) 50px;
+}
+`}}customElements.define("lwd-page-galery",LwdPageGalery);
