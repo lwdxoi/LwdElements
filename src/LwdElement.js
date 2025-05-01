@@ -92,3 +92,10 @@ class LwdElement extends HTMLElement {
     return (value) => this.setAttribute(attributeName, value);
   }
 }
+
+Object.defineProperty(location, 'hashParams', {
+  get: () => Object.fromEntries(location.hash.slice(1).split('&').map((kv) => kv.split('='))),
+  set: (params) => {
+    location.hash = '#' + Object.entries(params).map(([k, v]) =>  `${k}=${v}`).join('&') 
+  }
+});

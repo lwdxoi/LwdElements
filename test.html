@@ -3,18 +3,22 @@
 
 <head>
   <title>Test MSS HTML</title>
-  <script src="LwdElement.js"></script>
-  <script src="LwdSlot.js"></script>
+  <script src="./src/LwdElement.js"></script>
+  <script src="./src/LwdSlot.js"></script>
 
-  <script src="LwdButton.js"></script>
-  <script src="LwdGalery.js"></script>
-  <script src="LwdImage.js"></script>
-  <script src="LwdInput.js"></script>
-  <script src="LwdPagination.js"></script>
-  <script src="LwdSection.js"></script>
-  <script src="rawTest.js"></script>
-  <script src="LwdPage.js"></script>
-  <script src="LwdPageGalery.js"></script>
+  <script src="./src/elements/LwdButton.js"></script>
+  <script src="./src/elements/LwdGalery.js"></script>
+  <script src="./src/elements/LwdImage.js"></script>
+  <script src="./src/elements/LwdInput.js"></script>
+  <script src="./src/elements/LwdPagination.js"></script>
+  <script src="./src/elements/LwdSection.js"></script>
+  <script src="./src/elements/LwdTrigger.js"></script>
+  <script src="./src/elements/rawTest.js"></script>
+  <script src="./src/elements/LwdPage.js"></script>
+  <script src="./src/elements/LwdPageGalery.js"></script>
+  <script src="./src/elements/LwdVideo.js"></script>
+
+  <script src="../LwdLibs/ExternalApi/ExternalApi.js"></script>
 
   <style>
     html {
@@ -48,33 +52,64 @@
       width: 133px;
     } */
 
-    #top {
-      display: grid;
-      grid-template-columns: 7.5rem auto 2rem;
-      grid-template-rows: 2rem;
-      /* height:; */
-      width: 100vw;
-      top: 0;
-    }
 
     #side {
       height: calc(100vh - 20px);
       width: 200px;
       top: 20px;
       opacity: 30%;
+      z-index: 20;
     }
 
     lwd-page-galery {
-      padding: 40px;
+      padding: 1rem 0.5rem 0.5rem;
       height: 100vh;
       width: 100vw;
     }
 
-    #top lwd-input {
+    .top lwd-input {
       font-size: 1.5rem;
     }
 
     #top lwd-button {}
+
+    lwd-trigger.top {
+      height: 3rem;
+    }
+
+    lwd-section.top {
+      display: grid;
+      grid-template-columns: 7.5rem auto 2rem;
+      grid-template-rows: 2rem;
+      top: 0;
+    }
+
+    lwd-trigger.top,
+    lwd-section.top {
+      width: 100vw;
+    }
+
+    lwd-trigger.side {
+      width: 21rem;
+    }
+
+    lwd-section.side {
+      display: grid;
+      grid-template-columns: 7.5rem auto 2rem;
+      grid-template-rows: 2rem;
+      top: 0;
+      padding-top: 2rem;
+      width: 20rem;
+    }
+
+    lwd-trigger.side,
+    lwd-section.side {
+      height: 100vh;
+    }
+
+    lwd-pagination {
+      padding: 8px 40px;
+    }
   </style>
 </head>
 
@@ -83,25 +118,30 @@
 </body>
 
 <script>
-  document.body.append(pag = new LwdPagination({page: 1, lastPage: 20}))
+  // document.body.append(pag = new LwdPagination({page: 1, lastPage: 20}))
   // document.body.append(pag2 = new LwdPagination2({page: 1, lastPage: 20}))
   // document.body.append(li = new LwdImage({src: 'https://art.ngfiles.com/images/6227000/6227150_1440717_bigdad123_untitled-6227150.4acf7dfd9f13e493eaf0830e25746a08.jpg?f1732242522'}))
-  // document.body.append(topS = new LwdSection({ id: 'top' }))
-  // document.body.append(sideS = new LwdSection({id: 'side'}))
 
-  // galeryProps = { imageHeight: '270px', imageWidth: '300px' }
-  // document.body.append(pg = new LwdPageGalery({ fetchFunction: ExternalApi.fetchRule34xxx, pageSize: 9, galery: galeryProps }))
+  autocompleteFetch = async (search) => {
+    let autocompleteOption = await ExternalApi.autocompleteRule34xxx(search)
+    autocompleteOption = autocompleteOption.map(({ name, count, category }) =>
+      ({ innerText: `${name} (${count})`, value: name.replaceAll(' ', "_"), color: `var(--${category})` }))
+    return autocompleteOption
+  }
 
-  // topS.append(document.createElement('div'))
+  document.body.append(topTrigger = new LwdTrigger({ className: 'top' }))
+  topTrigger.append(topSection = new LwdSection({ className: 'top' }))
+  topSection.append(document.createElement('div'))
+  topSection.append(mainInput = new LwdInput({ name: 'search', autocompleteFetch }))
+  topSection.append(searchBtn = new LwdButton({ innerText: 'S', onclick: () => pg.search = mainInput.value }))
 
-  // autocompleteFetch = async (search) => {
-  //   let autocompleteOption = await ExternalApi.autocompleteRule34xxx(search)
-  //   autocompleteOption = autocompleteOption.map(({ name, count, category }) =>
-  //     ({ innerText: `${name} (${count})`, value: name.replaceAll(' ', "_"), color: `var(--${category})` }))
-  //   return autocompleteOption
-  // }
-  // topS.append(mainInput = new LwdInput({ name: 'search', autocompleteFetch }))
-  // topS.append(searchBtn = new LwdButton({ innerText: 'S', onclick: () => pg.search = mainInput.value }))
+  document.body.append(sideTrigger = new LwdTrigger({ className: 'side' }))
+  sideTrigger.append(sideSection = new LwdSection({ className: 'side' }))
+
+  galeryProps = { imageHeight: '270px', imageWidth: '300px' }
+  document.body.append(pg = new LwdPageGalery({ fetchFunction: ExternalApi.fetchRule34xxx, pageSize: 30, search: location.hashParams.search || '', galery: galeryProps, pagination: { page: location.hashParams.page } }))
+
+
 </script>
 
 </html>

@@ -6,14 +6,7 @@ class LwdInput extends LwdElement {
     this.autocomplete.className = 'autocomplete'
     this.input.addEventListener('input', (e) => this.value = e.target.value)
     this.addEventListener('input', this.fetchAutocompleteOptions)
-
-    // setTimeout(() => 
-    // this.autocompleteOptions = [
-    //   { innerText: 'Lana (1234)', value: 'lana' },
-    //   { innerText: 'Shantae (55)', value: 'shantae' },
-    //   { innerText: 'amphibian (12872)', value: 'amphibian' },
-    //   { innerText: 'sonic the hedgehog (series) (82674)', value: 'sonic_the_hedgehog_(series)' }]
-    // , 8000)
+    this.addEventListener('focusout', (e) => console.log('blur', e))
   }
 
   static get observedAttributes() {
@@ -95,24 +88,33 @@ class LwdInput extends LwdElement {
 :host{
   display: inline-grid;
   color: white;
-}
-input, .autocomplete{
-  background: #3d3d3d;
-  width: 100%;
-  border-radius: 0.4rem;
-  outline: none;
-  color: inherit;
-}
-
-input{
   border: #cacaca solid 1px;
   padding: 0 0.4rem;
+  background: #3d3d3d;
+  border-radius: 0.4rem;
+  outline: none;
+}
+input, .autocomplete{
+  all: inherit;
+  width: 100%;
+  padding: 0;
+  border: none;
+}
+
+// input{
+//   border: #cacaca solid 1px;
+//   padding: 0 0.4rem;
+// }
+
+:host(:focus) .autocomplete, .autocomplete:hover{
+  display: inherit;
 }
 
 .autocomplete{
   position: absolute;
   top: 100%;
   padding: 0.2rem 0;
+  display: none;
 }
 .autocomplete > div{
   height: ${this.clientHeight}px;
