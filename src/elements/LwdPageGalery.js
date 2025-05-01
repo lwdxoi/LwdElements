@@ -6,11 +6,13 @@ class LwdPageGalery extends LwdPage {
     this.shadowRoot.append(new LwdSlot({ name: 'pagination' }))
     this.append(this.galery = new LwdGalery({ ...galeryProps, slot: 'galery' }))
     this.append(this.pagination = new LwdPagination({ ...paginationProps, slot: 'pagination' }))
-    if (!!this.fetchFunction) this.fetch(this.search || '')
+    this.search ||= ''
 
     this.pagination.addEventListener('attribute-changed', ({ detail: { name } }) => name == 'page' ? this.render() : '');
+    this.pagination.addEventListener('attribute-changed', ({ detail: { name, newValue } }) => name == 'page' && newValue > this.pagination.lastPage - this.pagination.pagePad - 2 ? this.fetchFurther() : '');
     this.addEventListener('attribute-changed', ({ detail: { name, newValue } }) => name == 'search' ? this.fetch(newValue) : '')
 
+    if (!!this.fetchFunction) this.fetch(this.search).then(() => this.pagination.page = paginationProps.page)
   }
 
   static get observedAttributes() {
@@ -20,28 +22,29 @@ class LwdPageGalery extends LwdPage {
     return [...super.reRenderOnChange, 'page-size', '_fetch-function'];
   }
 
-
-  // get imageList(){
-  //   return this._imageList
-  // }
-  // set imageList(value){
-  //   const oldValue = this._imageList
-  //   this._imageList = value
-  //   this.attributeChangedCallback('image-list', oldValue, value)
-  //   this.render();
-  // }
-
   async fetch(search) {
     console.log('fetched', search)
-    this.fetchedImages = this.serialize(await this.fetchFunction(search))
+    this.fetchedImages = this.serializeImages(await this.fetchFunction(this.serializeSearchString(search)))
     // this.lastSearch = search
+    this.search = search
+    this.galery.hideFocus()
     this.pagination.lastPage = Math.ceil(this.fetchedImages.length / this.pageSize)
-    this.pagination.page = 1
     this.render()
   }
 
-  serialize(data) {
-    return data.map((rr) => ({ ...rr, id: `i-${rr.id}` }))
+  async fetchFurther() {
+    const search = this.search + ` id:<${this.fetchedImages[this.fetchedImages.length - 1].imageId}`
+    this.fetchedImages = this.fetchedImages.concat(this.serializeImages(await this.fetchFunction(this.serializeSearchString(search))))
+    this.pagination.lastPage = Math.ceil(this.fetchedImages.length / this.pageSize)
+    this.render()
+  }
+
+  serializeImages(data) {
+    return data.map((rr) => ({ ...rr, id: `i-${rr.id}`, imageId: rr.id }))
+  }
+
+  serializeSearchString(search) {
+    return search.replaceAll(' ', '+')
   }
 
   paginate() {
@@ -52,6 +55,11 @@ class LwdPageGalery extends LwdPage {
   render() {
     super.render()
     this.galery.imageList = this.paginate()
+    this.setHashParams()
+  }
+
+  setHashParams(){
+    location.hashParams = {page: this.pagination.page, search: this.search}
   }
 
   get styleSheet() {
