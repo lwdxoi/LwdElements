@@ -4,8 +4,8 @@ class LwdPagination extends LwdElement {
     this.shadowRoot.append(new LwdSlot())
 
     this.buttonConstructor = props.buttonConstructor || this.defaultButtonConstructor
-    this.page ||= 1
     this.lastPage ||= 1
+    this.page ||= 1
     this.pagePad ||= 4
   }
 
@@ -40,7 +40,6 @@ class LwdPagination extends LwdElement {
 
     this.querySelectorAll('lwd-button').forEach((lwdButton) => lwdButton.remove())
 
-    console.log('numberOfPage min', (this.pagePad * 2) + 1, this.lastPage)
     const numberOfPage = Math.min((this.pagePad * 2) + 1, this.lastPage)
     const firstPage = Math.max(1, Math.min(this.page - this.pagePad,  this.lastPage - numberOfPage + 1))
 

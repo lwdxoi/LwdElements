@@ -1,4 +1,4 @@
-class LwdSection extends LwdElement  {
+class LwdSection extends LwdElement {
   constructor(props = {}) {
     super(undefined, props);
     this.shadowRoot.append(new LwdSlot())

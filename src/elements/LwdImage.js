@@ -36,15 +36,20 @@ class LwdImage extends LwdElement  {
   get styleSheet() {
     return `${super.styleSheet}
 :host{
-  display: block;
+  display: flex;
   max-height: 100%;
   max-width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 div{
   display: flex;
   flex-direction: column;
-  max-height: var(--image-height);
-  max-width: var(--image-width);
+  // max-height: var(--image-height);
+  // max-width: var(--image-width);
+  max-height: 100%;
+  max-width: 100%;
 }
 a.frame{
   background-color: ${this.frameColor};
@@ -54,12 +59,11 @@ a.frame{
   text-align: center;
 }
 img{
-  max-height: var(--image-height);
-  max-width: var(--image-width);
+  // max-height: var(--image-height);
+  // max-width: var(--image-width);
   object-fit: contain;
-}
-  max-height: calc( var(--image-height) - 0.5rem - 4px );
-  max-width: calc( var(--image-width) - 4px );
+  width: 100%;
+  height: 100%;
 }
    
 `
